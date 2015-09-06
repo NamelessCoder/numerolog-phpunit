@@ -1,6 +1,8 @@
 Numerolog: PHPUnit extension
 ============================
 
+[![Build Status](https://img.shields.io/travis/NamelessCoder/numerolog-phpunit.svg?style=flat-square&label=package)](https://travis-ci.org/NamelessCoder/numerolog-phpunit) [![Coverage Status](https://img.shields.io/coveralls/NamelessCoder/numerolog-phpunit/master.svg?style=flat-square)](https://coveralls.io/r/NamelessCoder/numerolog-phpunit)
+
 Provides a new type of test case base class which contains additional assertion
 methods based on the statistical information gathered and analysed by Numerolog.
 

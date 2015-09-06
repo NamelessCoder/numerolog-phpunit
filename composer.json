@@ -4,6 +4,9 @@
         "phpunit/phpunit": "^4.8",
         "namelesscoder/numerolog": "^1.2"
     },
+    "require-dev": {
+        "satooshi/php-coveralls": "*"
+    },
     "autoload": {
         "psr-4": {
             "NamelessCoder\\NumerologPhpunit\\": "src/"
