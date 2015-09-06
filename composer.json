@@ -1,5 +1,6 @@
 {
     "name": "namelesscoder/numerolog-phpunit",
+    "description": "Numerolog-based statistical assertions for PHPUnit",
     "require": {
         "phpunit/phpunit": "^4.8",
         "namelesscoder/numerolog": "^1.2"
