@@ -47,7 +47,7 @@ the `\NamelessCoder\NumerologPhpunit\StatisticsTestCaseTrait` as trait in your c
 for those cases when that fits better with your unit tests' structure. Both methods
 will provide the same functions for your test case.
 
-There are six types of assertions to compare with various statistics:
+There are five types of assertions to compare with various statistics:
 
 ```php
 $this->assertLessThan******($counterName, $value, $count = 20);
@@ -61,7 +61,7 @@ Where `$counterName` is a `lowerCamelCase` name of a single counter; where `$val
 is the new value you with to compare - and where `$count` is the number of values
 to pull from history and use as data set in comparison.
 
-And where the `******` can be one of the following:
+And where the `******` can be one of the following four statistics parameters:
 
 * `Average`
 * `Minimum`
