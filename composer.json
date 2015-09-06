@@ -1,0 +1,12 @@
+{
+    "name": "namelesscoder/numerolog-phpunit",
+    "require": {
+        "phpunit/phpunit": "^4.8",
+        "namelesscoder/numerolog": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "NamelessCoder\\NumerologPhpunit\\": "src/"
+        }
+    }
+}
