@@ -9,7 +9,7 @@ use Composer\Autoload\ClassLoader;
  */
 abstract class StatisticalUnitTestCase extends \PHPUnit_Framework_TestCase {
 
-	const HISTORY_SIZE = 20;
+	const HISTORY_SIZE = 100;
 	const ASSERTION_TYPE_LESSTHAN = 'lessThan';
 	const ASSERTION_TYPE_LESSTHANOREQUAL = 'lessThanOrEqual';
 	const ASSERTION_TYPE_EQUALS = 'equals';
