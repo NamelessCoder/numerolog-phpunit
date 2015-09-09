@@ -1,6 +1,7 @@
 <?php
 namespace NamelessCoder\NumerologPhpunit\Tests\Unit;
 
+use NamelessCoder\Numerolog\NotFoundException;
 use NamelessCoder\NumerologPhpunit\StatisticalUnitTestCase;
 use NamelessCoder\NumerologPhpunit\StatisticalUnitTestTrait;
 use NamelessCoder\Numerolog\Client;
@@ -59,6 +60,43 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 			array('assertGreaterThanSum', 'sum', StatisticalUnitTestCase::ASSERTION_TYPE_GREATERTHAN),
 			array('assertGreaterThanOrEqualToSum', 'sum', StatisticalUnitTestCase::ASSERTION_TYPE_GREATERTHANOREQUAL),
 		);
+	}
+
+	/**
+	 * @test
+	 */
+	public function testPerformStandardAssertionOnStatisticsCounterIgnoresNotFoundExceptionIfTokenIsSet() {
+		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage', 'getToken'))->getMock();
+		$client->expects($this->once())->method('getPackage')->willReturn('foobar-package');
+		$client->expects($this->once())->method('get')->willThrowException(new NotFoundException());
+		$client->expects($this->once())->method('getToken')->willReturn('foobar-token');
+		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
+			->setMethods(array('getNumerologClient', 'assertLessThanOrEqual'))
+			->getMockForTrait();
+		$subject->expects($this->once())->method('getNumerologClient')->willReturn($client);
+		$subject->expects($this->never())->method('assertLessThanOrEqual');
+		$method = new \ReflectionMethod($subject, 'performStandardAssertionOnStatisticsCounter');
+		$method->setAccessible(TRUE);
+		$method->invokeArgs($subject, array('foobar-counter', 'average', 'lessThanOrEqual', 30, 50));
+	}
+
+	/**
+	 * @test
+	 */
+	public function testPerformStandardAssertionOnStatisticsCounterRethrowsNotFoundExceptionIfTokenIsSet() {
+		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage', 'getToken'))->getMock();
+		$client->expects($this->once())->method('getPackage')->willReturn('foobar-package');
+		$client->expects($this->once())->method('get')->willThrowException(new NotFoundException());
+		$client->expects($this->once())->method('getToken')->willReturn(NULL);
+		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
+			->setMethods(array('getNumerologClient', 'assertLessThanOrEqual'))
+			->getMockForTrait();
+		$subject->expects($this->once())->method('getNumerologClient')->willReturn($client);
+		$subject->expects($this->never())->method('assertLessThanOrEqual');
+		$method = new \ReflectionMethod($subject, 'performStandardAssertionOnStatisticsCounter');
+		$method->setAccessible(TRUE);
+		$this->setExpectedException(NotFoundException::class);
+		$method->invokeArgs($subject, array('foobar-counter', 'average', 'lessThanOrEqual', 30, 50));
 	}
 
 	/**

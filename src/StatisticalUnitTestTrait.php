@@ -2,6 +2,7 @@
 namespace NamelessCoder\NumerologPhpunit;
 
 use NamelessCoder\Numerolog\Client;
+use NamelessCoder\Numerolog\NotFoundException;
 
 /**
  * Class StatisticalUnitTestTrait
@@ -348,20 +349,26 @@ trait StatisticalUnitTestTrait {
 		$count = 20
 	) {
 		$client = $this->getNumerologClient();
-		$response = $client->get($client->getPackage(), $counterName, $count);
-		$expected = $response['statistics'][$statisticsName];
-		$assertionMethod = 'assert' . ucfirst($assertionType);
-		$this->$assertionMethod(
-			$expected,
-			$value,
-			sprintf(
-				'Value %s failed assertion %s against statistical counter %s which had value %s',
+		try {
+			$response = $client->get($client->getPackage(), $counterName, $count);
+			$expected = $response['statistics'][$statisticsName];
+			$assertionMethod = 'assert' . ucfirst($assertionType);
+			$this->$assertionMethod(
+				$expected,
 				$value,
-				$assertionType,
-				$counterName,
-				$expected
-			)
-		);
+				sprintf(
+					'Value %s failed assertion %s against statistical counter %s which had value %s',
+					$value,
+					$assertionType,
+					$counterName,
+					$expected
+				)
+			);
+		} catch (NotFoundException $error) {
+			if (!$client->getToken()) {
+				throw $error;
+			}
+		}
 	}
 
 	/**
