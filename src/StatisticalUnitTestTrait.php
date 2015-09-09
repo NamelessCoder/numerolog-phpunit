@@ -349,6 +349,7 @@ trait StatisticalUnitTestTrait {
 		$count = 20
 	) {
 		$client = $this->getNumerologClient();
+		$token = $client->getToken();
 		try {
 			$packageName = $client->getPackage();
 			$response = $client->get($packageName, $counterName, $count);
@@ -366,9 +367,11 @@ trait StatisticalUnitTestTrait {
 				)
 			);
 		} catch (NotFoundException $error) {
-			if (!$client->getToken()) {
+			if (empty($token)) {
 				throw $error;
 			}
+		}
+		if (!empty($token)) {
 			$client->save($packageName, $counterName, $value);
 		}
 	}
