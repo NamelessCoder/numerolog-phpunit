@@ -177,7 +177,7 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)->setMethods(array('dummy'))->getMockForTrait();
 		$method = new \ReflectionMethod($subject, 'getComposerManifest');
 		$method->setAccessible(TRUE);
-		$result = $method->invoke($subject);
+		$result = $method->invokeArgs($subject, array('numerolog-phpunit/composer.json'));
 		$this->assertNotEmpty($result);
 	}
 

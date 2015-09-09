@@ -402,7 +402,7 @@ trait StatisticalUnitTestTrait {
 		// upwards in folders, which allows for a maximum of 4 nested folders in
 		// the "vendor-dir" setting if it is custom. Which should be enough...
 		$jumps = 7;
-		$path = realpath(__DIR__ . '/../') . '/';
+		$path = realpath(__DIR__ . '/../../') . '/';
 		$candidate = NULL;
 		do {
 			$candidate = $path . $manifestFilename;
