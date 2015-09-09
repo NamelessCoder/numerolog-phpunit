@@ -376,15 +376,17 @@ trait StatisticalUnitTestTrait {
 	 */
 	protected function getNumerologClient() {
 		if (!isset(static::$numerologClient)) {
-			$composer = $this->getComposerManifest();
-			$client = new Client();
+			list ($directory, $composer) = $this->getComposerManifest();
 			if (!isset($composer['name'])) {
 				throw new \RuntimeException('Composer manifest does not contain a "name"');
 			}
+			$client = new Client();
 			$client->setPackage($composer['name']);
 			if (isset($composer['extra']['namelesscoder/numerolog']['host'])) {
 				$client->setEndPointUrl($composer['extra']['namelesscoder/numerolog']['host']);
 			}
+			$tokenFile = $directory . '.numerolog-token-' . sha1($composer['name']);
+			$client->setToken(file_exists($tokenFile) ? trim(file_get_contents($tokenFile)) : NULL);
 			static::$numerologClient = $client;
 		}
 		return static::$numerologClient;
@@ -393,22 +395,25 @@ trait StatisticalUnitTestTrait {
 	/**
 	 * @param string $manifestFilename
 	 * @throws \RuntimeException
-	 * @return string|NULL
+	 * @return array
 	 */
 	protected function getComposerManifest($manifestFilename = 'composer.json') {
 		// Make sure we start at the root of this current package. Allow 7 jumps
 		// upwards in folders, which allows for a maximum of 4 nested folders in
 		// the "vendor-dir" setting if it is custom. Which should be enough...
 		$jumps = 7;
-		$path = realpath(__DIR__ . '/../');
+		$path = realpath(__DIR__ . '/../') . '/';
 		$candidate = NULL;
 		do {
-			$candidate = $path . '/' . $manifestFilename;
-		} while ($jumps > 0 && --$jumps && !file_exists($candidate) && $path = realpath($path . '/../'));
+			$candidate = $path . $manifestFilename;
+		} while ($jumps > 0 && --$jumps && !file_exists($candidate) && $path = realpath($path . '/../') . '/');
 		if (!file_exists($candidate)) {
 			throw new \RuntimeException('Could not resolve path to composer.json');
 		}
-		return json_decode(file_get_contents($candidate), JSON_OBJECT_AS_ARRAY);
+		return array(
+			$path . '/',
+			json_decode(file_get_contents($candidate), JSON_OBJECT_AS_ARRAY)
+		);
 	}
 
 }

@@ -128,7 +128,7 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
 			->setMethods(array('getComposerManifest'))
 			->getMockForTrait();
-		$subject->expects($this->once())->method('getComposerManifest')->willReturn($manifest);
+		$subject->expects($this->once())->method('getComposerManifest')->willReturn(array(NULL, $manifest));
 		$method = new \ReflectionMethod($subject, 'getNumerologClient');
 		$method->setAccessible(TRUE);
 		$this->setExpectedException('RuntimeException');
@@ -145,7 +145,7 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
 			->setMethods(array('getComposerManifest'))
 			->getMockForTrait();
-		$subject->expects($this->once())->method('getComposerManifest')->willReturn($manifest);
+		$subject->expects($this->once())->method('getComposerManifest')->willReturn(array(NULL, $manifest));
 		$method = new \ReflectionMethod($subject, 'getNumerologClient');
 		$method->setAccessible(TRUE);
 		$client = $method->invoke($subject);
