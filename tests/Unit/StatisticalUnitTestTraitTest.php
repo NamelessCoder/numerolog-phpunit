@@ -65,11 +65,12 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @test
 	 */
-	public function testPerformStandardAssertionOnStatisticsCounterIgnoresNotFoundExceptionIfTokenIsSet() {
-		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage', 'getToken'))->getMock();
+	public function testPerformStandardAssertionOnStatisticsCounterIgnoresNotFoundExceptionAndSavesIfTokenIsSet() {
+		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage', 'getToken', 'save'))->getMock();
 		$client->expects($this->once())->method('getPackage')->willReturn('foobar-package');
 		$client->expects($this->once())->method('get')->willThrowException(new NotFoundException());
 		$client->expects($this->once())->method('getToken')->willReturn('foobar-token');
+		$client->expects($this->once())->method('save');
 		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
 			->setMethods(array('getNumerologClient', 'assertLessThanOrEqual'))
 			->getMockForTrait();

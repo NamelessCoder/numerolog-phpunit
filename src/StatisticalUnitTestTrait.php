@@ -350,7 +350,8 @@ trait StatisticalUnitTestTrait {
 	) {
 		$client = $this->getNumerologClient();
 		try {
-			$response = $client->get($client->getPackage(), $counterName, $count);
+			$packageName = $client->getPackage();
+			$response = $client->get($packageName, $counterName, $count);
 			$expected = $response['statistics'][$statisticsName];
 			$assertionMethod = 'assert' . ucfirst($assertionType);
 			$this->$assertionMethod(
@@ -368,6 +369,7 @@ trait StatisticalUnitTestTrait {
 			if (!$client->getToken()) {
 				throw $error;
 			}
+			$client->save($packageName, $counterName, $value);
 		}
 	}
 
