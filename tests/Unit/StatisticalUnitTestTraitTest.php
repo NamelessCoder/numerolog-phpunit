@@ -103,6 +103,23 @@ class StatisticalUnitTestTraitTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @test
 	 */
+	public function testPerformStandardAssertionOnStatisticsCounterAssertsTrueIfNoStatisticsRecorded() {
+		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage'))->getMock();
+		$client->expects($this->once())->method('getPackage')->willReturn('foobar-package');
+		$client->expects($this->once())->method('get')->with('foobar-package', 'foobar-counter', 50)->willReturn(array());
+		$subject = $this->getMockBuilder(StatisticalUnitTestTrait::class)
+			->setMethods(array('getNumerologClient', 'assertTrue'))
+			->getMockForTrait();
+		$subject->expects($this->once())->method('getNumerologClient')->willReturn($client);
+		$subject->expects($this->once())->method('assertTrue')->with(TRUE);
+		$method = new \ReflectionMethod($subject, 'performStandardAssertionOnStatisticsCounter');
+		$method->setAccessible(TRUE);
+		$method->invokeArgs($subject, array('foobar-counter', 'average', 'lessThanOrEqual', 30, 50));
+	}
+
+	/**
+	 * @test
+	 */
 	public function testPerformStandardAssertionOnStatisticsCounter() {
 		$client = $this->getMockBuilder(Client::class)->setMethods(array('get', 'getPackage'))->getMock();
 		$client->expects($this->once())->method('getPackage')->willReturn('foobar-package');

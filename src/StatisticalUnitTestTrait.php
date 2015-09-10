@@ -353,19 +353,23 @@ trait StatisticalUnitTestTrait {
 		try {
 			$packageName = $client->getPackage();
 			$response = $client->get($packageName, $counterName, $count);
-			$expected = $response['statistics'][$statisticsName];
-			$assertionMethod = 'assert' . ucfirst($assertionType);
-			$this->$assertionMethod(
-				$expected,
-				$value,
-				sprintf(
-					'Value %s failed assertion %s against statistical counter %s which had value %s',
+			if (empty($response['statistics'])) {
+				$this->assertTrue(TRUE);
+			} else {
+				$expected = $response['statistics'][$statisticsName];
+				$assertionMethod = 'assert' . ucfirst($assertionType);
+				$this->$assertionMethod(
+					$expected,
 					$value,
-					$assertionType,
-					$counterName,
-					$expected
-				)
-			);
+					sprintf(
+						'Value %s failed assertion %s against statistical counter %s which had value %s',
+						$value,
+						$assertionType,
+						$counterName,
+						$expected
+					)
+				);
+			}
 		} catch (NotFoundException $error) {
 			if (empty($token)) {
 				throw $error;
