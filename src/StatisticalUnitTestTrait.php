@@ -348,6 +348,7 @@ trait StatisticalUnitTestTrait {
 		$value,
 		$count = 20
 	) {
+		$counterName = array_pop(explode('\\', get_class($this))) . '_' . $counterName;
 		$client = $this->getNumerologClient();
 		$token = $client->getToken();
 		try {
